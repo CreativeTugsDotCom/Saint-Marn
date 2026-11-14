@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint Marn Enterprises | Residential & Commercial Property Services</title>
+    
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        porcelain: '#F6F4EF',
+                        forest: '#202B29',
+                        sage: '#728A78',
+                        eucalyptus: '#DDE6DB',
+                        sand: '#D8CCBA',
+                        brass: '#B78458',
+                    },
+                    fontFamily: {
+                        sans: ['Onest', 'sans-serif'],
+                        display: ['Instrument Sans', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '3rem',
+                        '6xl': '4rem',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            /* FIX 1: This was mistakenly set to '10%' instead of '100%' */
+                            '100%': { opacity: '1' }, 
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Utilities */
+        body {
+            background-color: #F6F4EF;
+            color: #202B29;
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism Navigation */
+        .glass-nav {
+            background: rgba(246, 244, 239, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(32, 43, 41, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-nav.scrolled {
+            background: rgba(246, 244, 239, 0.95);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            box-shadow: 0 15px 40px rgba(32, 43, 41, 0.12);
+            border: 1px solid rgba(32, 43, 41, 0.05);
+        }
+
+        /* Fluid Section Transitions */
+        .curved-bottom {
+            position: relative;
+        }
+        .curved-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: inherit;
+            border-radius: 0 0 50% 50% / 0 0 100% 100%;
+            z-index: 1;
+        }
+
+        /* Floating Contact Dock */
+        .contact-tab {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 50px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .contact-tab:hover {
+            width: 180px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F6F4EF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D8CCBA;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #728A78;
+        }
+        
+        /* SPA Pages visibility */
+        .page-view {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .page-view.active {
+            display: block;
+            /* FIX 2: Explicitly ensure active state has full opacity */
+            opacity: 1;
+        }
+        
+        /* Logo Blending Fixes */
+        .brand-logo {
+            mix-blend-mode: multiply; 
+        }
+        
+        /* Seamlessly extract text from JPG on dark background */
+        .footer-logo {
+            filter: invert(1) contrast(1.2); 
+            mix-blend-mode: screen; 
+            opacity: 0.9;
+        }
+
+        /* Gallery Filter Styles */
+        .filter-btn.active {
+            background-color: #728A78;
+            color: white;
+            border-color: #728A78;
+        }
+        .gallery-item {
+            transition: all 0.4s ease;
+        }
+        .gallery-item.hidden {
+            display: none;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="antialiased font-sans selection:bg-sage selection:text-white">
+
+    <!-- FLOATING GLASSMORPHIC HEADER -->
+    <header id="main-nav" class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl glass-nav rounded-full z-50 flex items-center justify-between px-6 py-4">
+        <!-- Logo -->
+        <a href="#home" class="flex-shrink-0 flex items-center gap-2 md:gap-3 z-10 transition-transform hover:scale-105">
+            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/548304449_122117237096965029_2833527915417557357_n.jpg" alt="Saint Marn Logo" class="h-10 md:h-12 w-auto object-contain brand-logo">
+            <div class="hidden sm:flex flex-col justify-center">
+                <span class="font-display font-bold text-forest text-lg md:text-xl leading-none">Saint Marn</span>
+                <span class="font-sans font-medium text-forest/60 text-[10px] md:text-xs tracking-widest uppercase mt-0.5">Enterprises</span>
+            </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-8 font-medium text-forest text-sm tracking-wide">
+            <a href="#home" class="hover:text-sage transition-colors relative group">Home
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#residential" class="hover:text-sage transition-colors relative group">Residential
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#commercial" class="hover:text-sage transition-colors relative group">Commercial
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#services" class="hover:text-sage transition-colors relative group">Services
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#projects" class="hover:text-sage transition-colors relative group">Projects
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#about" class="hover:text-sage transition-colors relative group">About
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#entertainment" id="nav-ent" class="hover:text-sage transition-colors relative group">Entertainment
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-sage transition-all group-hover:w-full"></span>
+            </a>
+        </nav>
+
+        <!-- CTA & Mobile Toggle -->
+        <div class="flex items-center gap-4 z-10">
+            <a href="#contact" class="hidden md:inline-flex items-center justify-center px-6 py-2.5 bg-forest text-porcelain rounded-full text-sm font-medium hover:bg-sage transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300">
+                Contact Us
+            </a>
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-forest focus:outline-none" aria-label="Menu">
+                <i class="ph ph-list text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="absolute top-full left-0 mt-4 w-full bg-porcelain/95 rounded-3xl shadow-2xl overflow-hidden hidden flex-col lg:hidden border border-white/40 backdrop-blur-xl">
+            <div class="flex flex-col p-6 gap-4 text-forest font-medium text-lg">
+                <a href="#home" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Home</a>
+                <a href="#residential" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Residential</a>
+                <a href="#commercial" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Commercial</a>
+                <a href="#services" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Services</a>
+                <a href="#projects" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Projects</a>
+                <a href="#about" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">About</a>
+                <a href="#entertainment" class="mobile-link hover:text-sage transition-colors pb-2 border-b border-sand/30">Entertainment</a>
+                <a href="#contact" class="mobile-link hover:text-sage transition-colors pb-2">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- FLOATING CONTACT DOCK (Desktop Right) -->
+    <div class="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-2 z-40 hidden md:flex p-4">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/SaintMarnEnterprisesLlc" target="_blank" class="contact-tab flex items-center h-[50px] bg-white rounded-l-full shadow-lg border border-gray-100 hover:bg-[#1877F2] hover:text-white group text-forest">
+            <div class="w-[50px] h-[50px] flex-shrink-0 flex items-center justify-center">
+                <i class="ph-fill ph-facebook-logo text-2xl group-hover:text-white text-[#1877F2]"></i>
+            </div>
+            <span class="font-medium pr-6 opacity-0 group-hover:opacity-100 transition-opacity delay-100">Facebook</span>
+        </a>
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@saintmarnenterprisesllc" target="_blank" class="contact-tab flex items-center h-[50px] bg-white rounded-l-full shadow-lg border border-gray-100 hover:bg-black hover:text-white group text-forest">
+            <div class="w-[50px] h-[50px] flex-shrink-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-5 h-5">
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#25F4EE" transform="translate(-4, -4)"/>
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#FE2C55" transform="translate(4, 4)"/>
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="font-medium pr-6 opacity-0 group-hover:opacity-100 transition-opacity delay-100">TikTok</span>
+        </a>
+        <!-- Phone -->
+        <a href="tel:+18602727918" class="contact-tab flex items-center h-[50px] bg-white rounded-l-full shadow-lg border border-gray-100 hover:bg-sage hover:text-white group text-forest">
+            <div class="w-[50px] h-[50px] flex-shrink-0 flex items-center justify-center">
+                <i class="ph-fill ph-phone-call text-2xl group-hover:text-white text-sage"></i>
+            </div>
+            <span class="font-medium pr-6 opacity-0 group-hover:opacity-100 transition-opacity delay-100">Call Saint Marn</span>
+        </a>
+        <!-- Email -->
+        <a href="mailto:saintmarnenterprises@gmail.com" class="contact-tab flex items-center h-[50px] bg-white rounded-l-full shadow-lg border border-gray-100 hover:bg-forest hover:text-white group text-forest">
+            <div class="w-[50px] h-[50px] flex-shrink-0 flex items-center justify-center">
+                <i class="ph-fill ph-envelope-simple text-2xl group-hover:text-white text-forest"></i>
+            </div>
+            <span class="font-medium pr-6 opacity-0 group-hover:opacity-100 transition-opacity delay-100">Email Us</span>
+        </a>
+    </div>
+
+    <!-- Mobile Bottom Dock -->
+    <div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] bg-white/95 backdrop-blur-xl rounded-full shadow-2xl z-40 md:hidden flex justify-between items-center px-6 py-3 border border-gray-200">
+        <a href="https://www.facebook.com/SaintMarnEnterprisesLlc" target="_blank" class="flex flex-col items-center text-[#1877F2]">
+            <i class="ph-fill ph-facebook-logo text-2xl"></i>
+            <span class="text-[10px] font-medium text-forest mt-1">Facebook</span>
+        </a>
+        <a href="https://www.tiktok.com/@saintmarnenterprisesllc" target="_blank" class="flex flex-col items-center text-black">
+            <div class="h-6 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-5 h-5">
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#25F4EE" transform="translate(-4, -4)"/>
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#FE2C55" transform="translate(4, 4)"/>
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="text-[10px] font-medium text-forest mt-1">TikTok</span>
+        </a>
+        <a href="tel:+18602727918" class="flex flex-col items-center text-sage">
+            <i class="ph-fill ph-phone-call text-2xl"></i>
+            <span class="text-[10px] font-medium text-forest mt-1">Call</span>
+        </a>
+        <a href="mailto:saintmarnenterprises@gmail.com" class="flex flex-col items-center text-forest">
+            <i class="ph-fill ph-envelope-simple text-2xl"></i>
+            <span class="text-[10px] font-medium text-forest mt-1">Email</span>
+        </a>
+    </div>
+
+    <!-- POPUP CTA (18s Delay) -->
+    <div id="consultation-popup" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-forest/40 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-500">
+        <div class="bg-porcelain rounded-4xl max-w-lg w-full p-8 md:p-10 shadow-2xl relative transform translate-y-8 transition-transform duration-500 popup-content">
+            <button id="close-popup" class="absolute top-6 right-6 text-forest/50 hover:text-forest transition-colors bg-white rounded-full p-2 shadow-sm" aria-label="Close popup">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/548304449_122117237096965029_2833527915417557357_n.jpg" alt="Saint Marn Logo" class="h-16 w-auto object-contain brand-logo mb-6">
+            <h3 class="font-display text-3xl md:text-4xl text-forest font-bold mb-4 leading-tight">Let's Take Care of Your Property.</h3>
+            <p class="text-forest/70 font-sans text-lg mb-8 leading-relaxed">Tell us what you need. Saint Marn offers residential and commercial services designed around your property and your requirements.</p>
+            <div class="flex flex-col gap-3">
+                <a href="tel:+18602727918" class="w-full py-4 bg-forest text-porcelain rounded-full font-medium text-center hover:bg-sage transition-colors">Call Now</a>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="mailto:saintmarnenterprises@gmail.com" class="w-full py-3 bg-white text-forest border border-sand rounded-full font-medium text-center hover:bg-sand/30 transition-colors">Email Us</a>
+                    <a href="#services" id="popup-explore" class="w-full py-3 bg-eucalyptus text-forest rounded-full font-medium text-center hover:bg-sage hover:text-white transition-colors">Explore Services</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SPA CONTAINER -->
+    <main id="app" class="w-full min-h-screen pt-28 md:pt-36 pb-24 md:pb-0">
+        
+        <!-- ==================== HOME PAGE ==================== -->
+        <section id="page-home" class="page-view active">
+            
+            <!-- SECTION 01: HERO -->
+            <div class="relative w-full max-w-[1400px] mx-auto px-4 md:px-8 mb-24 lg:mb-32">
+                <div class="grid lg:grid-cols-12 gap-8 items-center bg-eucalyptus/30 rounded-5xl p-6 md:p-12 lg:p-16 overflow-hidden relative">
+                    <!-- Decor shape -->
+                    <div class="absolute -top-40 -left-40 w-96 h-96 bg-sage/20 rounded-full blur-3xl"></div>
+                    
+                    <div class="lg:col-span-6 relative z-10 animate-slide-up text-center lg:text-left">
+                        <span class="inline-block px-4 py-1.5 bg-sage/10 text-sage rounded-full text-sm font-semibold tracking-wide uppercase mb-6">Residential & Commercial Property Services</span>
+                        <h1 class="font-display text-5xl md:text-6xl lg:text-[5rem] leading-[1.05] text-forest font-bold mb-6 tracking-tight">
+                            Your Property Deserves <span class="text-sage italic">More Than</span> Just Maintenance.
+                        </h1>
+                        <p class="text-lg md:text-xl text-forest/70 font-sans mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                            From home cleaning and property upkeep to commercial cleaning, hauling and maintenance, Saint Marn provides thoughtful solutions for the spaces that matter to you.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                            <a href="#services" class="w-full sm:w-auto px-8 py-4 bg-forest text-porcelain rounded-full font-medium hover:bg-sage transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 text-center">Explore Our Services</a>
+                            <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-white text-forest border border-sand rounded-full font-medium hover:bg-sand/20 transition-all text-center">Get in Touch</a>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-6 relative z-10 h-[500px] lg:h-[700px] w-full mt-12 lg:mt-0 animate-fade-in" style="animation-delay: 0.3s;">
+                        <!-- Organic Masking Image -->
+                        <div class="w-full h-full relative">
+                            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Beautifully maintained residential interior" class="w-full h-full object-cover rounded-[3rem] shadow-2xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 02: BRAND TRUST STRIP -->
+            <div class="w-full bg-forest text-porcelain py-12 px-6">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+                    <div>
+                        <h4 class="font-display text-2xl md:text-3xl mb-2">Trusted Property Care in Connecticut</h4>
+                        <p class="text-porcelain/70 font-light">Residential & Commercial Services • English & Spanish</p>
+                    </div>
+                    <a href="https://www.facebook.com/SaintMarnEnterprisesLlc" target="_blank" class="group flex items-center gap-4 bg-white/10 px-6 py-4 rounded-2xl hover:bg-white/20 transition-colors border border-white/5">
+                        <div class="flex items-center justify-center w-12 h-12 bg-[#1877F2] rounded-full text-white">
+                            <i class="ph-fill ph-facebook-logo text-2xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-xl font-bold leading-tight group-hover:text-white">90% Recommend</p>
+                            <p class="text-sm text-porcelain/70">Based on 24 Facebook Reviews</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SECTION 03: ABOUT SAINT MARN -->
+            <div class="py-24 px-6 max-w-7xl mx-auto curved-bottom bg-porcelain">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 lg:order-1 relative h-[600px]">
+                        <!-- Authentic Collage -->
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/530710034_122103805994965029_1245601474858829304_n.jpg" alt="Saint Marn Professional Service" class="absolute top-0 left-0 w-2/3 h-[300px] object-cover rounded-4xl shadow-lg border-4 border-white z-20">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/530887195_122104650560965029_7386259600023778571_n.jpg" alt="Saint Marn Property Care" class="absolute top-[250px] right-0 w-[55%] h-[350px] object-cover rounded-[3rem] shadow-xl z-10 border-4 border-white">
+                        <div class="absolute bottom-10 left-10 w-[45%] h-[200px] bg-sand rounded-3xl p-6 flex flex-col justify-center shadow-md z-30 transform -rotate-3">
+                            <i class="ph-fill ph-quotes text-3xl text-brass/40 mb-2"></i>
+                            <p class="font-display text-xl text-forest font-medium italic">"Where professionalism meets creativity."</p>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2">
+                        <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">Professional Service.<br><span class="text-sage">A Personal Approach.</span></h2>
+                        <p class="text-lg text-forest/70 mb-6 leading-relaxed">
+                            At Saint Marn Enterprises LLC, we understand that your property is more than just a physical space. We provide comprehensive residential and commercial property services tailored to your specific requirements.
+                        </p>
+                        <p class="text-lg text-forest/70 mb-8 leading-relaxed">
+                            From meticulous interior cleaning to exterior property maintenance, moving assistance, and cleanouts, our adaptable team brings professionalism, care, and attention to detail to every project in Glastonbury and surrounding areas.
+                        </p>
+                        <a href="#about" class="inline-flex items-center gap-2 font-medium text-sage hover:text-forest transition-colors text-lg group">
+                            Learn more about our approach
+                            <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 04: SERVICE DIVISIONS -->
+            <div class="py-24 bg-eucalyptus/20 relative">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center max-w-3xl mx-auto mb-20">
+                        <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">Comprehensive Property Solutions</h2>
+                        <p class="text-lg text-forest/70">Expert services designed for homes, businesses, and property managers.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-12">
+                        <!-- Division 01: Cleaning -->
+                        <div class="bg-white rounded-5xl p-8 md:p-12 shadow-sm border border-sand/20 hover:shadow-xl transition-shadow duration-500">
+                            <div class="grid md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <div class="w-14 h-14 bg-sage/10 text-sage rounded-full flex items-center justify-center mb-6">
+                                        <i class="ph-fill ph-sparkle text-3xl"></i>
+                                    </div>
+                                    <h3 class="font-display text-3xl font-bold text-forest mb-4">Cleaning Services</h3>
+                                    <div class="grid grid-cols-2 gap-4 mb-8">
+                                        <div>
+                                            <h4 class="font-bold text-forest mb-2">Residential</h4>
+                                            <ul class="text-forest/70 space-y-2 text-sm">
+                                                <li>• Deep cleaning</li>
+                                                <li>• Move-in / move-out</li>
+                                                <li>• Routine cleaning</li>
+                                                <li>• Detailed residential</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-forest mb-2">Commercial</h4>
+                                            <ul class="text-forest/70 space-y-2 text-sm">
+                                                <li>• Office cleaning</li>
+                                                <li>• Facility cleaning</li>
+                                                <li>• Rental property</li>
+                                                <li>• Post-construction</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a href="#services" class="inline-flex items-center justify-center px-6 py-3 bg-porcelain text-forest rounded-full font-medium hover:bg-sage hover:text-white transition-colors">Explore Cleaning</a>
+                                </div>
+                                <div class="h-[400px] w-full rounded-4xl overflow-hidden relative">
+                                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651277087_122147417702965029_9012275225514899227_n.jpg" alt="Saint Marn Professional Cleaning" class="w-full h-full object-cover">
+                                    <!-- Authentic Window Cleaning Insert -->
+                                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/528766621_122101730948965029_419489965302070682_n.jpg" alt="Saint Marn Window Cleaning" class="absolute -bottom-6 -left-6 w-48 h-48 object-cover rounded-3xl border-8 border-white shadow-lg hidden sm:block">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Division 02: Maintenance -->
+                        <div class="bg-forest text-porcelain rounded-5xl p-8 md:p-12 shadow-xl">
+                            <div class="grid md:grid-cols-2 gap-12 items-center">
+                                <div class="order-2 md:order-1 h-[400px] w-full rounded-4xl overflow-hidden relative">
+                                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/557974456_122120706134965029_2158132408989259323_n.jpg" alt="Property Maintenance" class="w-full h-full object-cover">
+                                </div>
+                                <div class="order-1 md:order-2">
+                                    <div class="w-14 h-14 bg-white/10 text-sand rounded-full flex items-center justify-center mb-6">
+                                        <i class="ph-fill ph-wrench text-3xl"></i>
+                                    </div>
+                                    <h3 class="font-display text-3xl font-bold mb-4">Property Maintenance</h3>
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-6 mb-8 text-sm">
+                                        <div>
+                                            <h4 class="font-bold text-sand mb-2">Gutter Cleaning</h4>
+                                            <p class="text-porcelain/70">Downspout clearing & leaf removal.</p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sand mb-2">Pressure Washing</h4>
+                                            <p class="text-porcelain/70">Siding, patios, decks, surfaces.</p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sand mb-2">Painting & Prep</h4>
+                                            <p class="text-porcelain/70">Interior painting, patching, finishing.</p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-sand mb-2">Landscaping</h4>
+                                            <p class="text-porcelain/70">Lawn care, seasonal cleanups.</p>
+                                        </div>
+                                    </div>
+                                    <a href="#services" class="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white rounded-full font-medium hover:bg-white hover:text-forest transition-colors">Explore Maintenance</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Division 03: Cleanouts & Hauling -->
+                        <div class="bg-sand/30 rounded-5xl p-8 md:p-12 shadow-sm border border-sand/40 hover:shadow-xl transition-shadow duration-500">
+                            <div class="grid md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <div class="w-14 h-14 bg-brass/20 text-brass rounded-full flex items-center justify-center mb-6">
+                                        <i class="ph-fill ph-truck text-3xl"></i>
+                                    </div>
+                                    <h3 class="font-display text-3xl font-bold text-forest mb-4">Cleanouts & Hauling</h3>
+                                    <div class="space-y-6 mb-8 text-forest/80 text-sm">
+                                        <div>
+                                            <h4 class="font-bold text-forest text-base">Property Cleanouts</h4>
+                                            <p>Estate, apartment, basement, garage, and whole-property cleanouts.</p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-forest text-base">Moving & Hauling</h4>
+                                            <p>Local moving, furniture delivery, loading/unloading, and commercial hauling.</p>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-forest text-base">Junk Removal</h4>
+                                            <p>Responsible disposal of furniture, appliances, yard debris, and junk.</p>
+                                        </div>
+                                    </div>
+                                    <a href="#services" class="inline-flex items-center justify-center px-6 py-3 bg-white text-forest rounded-full font-medium hover:bg-forest hover:text-white transition-colors">Explore Hauling</a>
+                                </div>
+                                <div class="h-[400px] w-full rounded-4xl overflow-hidden relative">
+                                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651173435_122147417762965029_3232453120105519688_n.jpg" alt="Saint Marn Moving and Hauling" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 05: RESIDENTIAL & COMMERCIAL SPLIT -->
+            <div class="grid md:grid-cols-2 min-h-[80vh]">
+                <!-- Residential -->
+                <div class="bg-sand p-12 md:p-20 flex flex-col justify-center relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80" alt="Residential Home" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-multiply group-hover:scale-105 transition-transform duration-1000">
+                    <div class="relative z-10">
+                        <h2 class="font-display text-5xl font-bold text-forest mb-6">Residential Experience</h2>
+                        <p class="text-xl text-forest/80 mb-8 max-w-md">Creating clean, comfortable, and well-maintained environments for homeowners, tenants, and families.</p>
+                        <a href="#residential" class="inline-flex items-center gap-2 px-8 py-4 bg-forest text-porcelain rounded-full font-medium hover:bg-white hover:text-forest transition-colors shadow-lg">
+                            Explore Residential Services
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Commercial -->
+                <div class="bg-forest p-12 md:p-20 flex flex-col justify-center relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1000&q=80" alt="Commercial Office" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-screen group-hover:scale-105 transition-transform duration-1000">
+                    <div class="relative z-10">
+                        <h2 class="font-display text-5xl font-bold text-porcelain mb-6">Commercial Experience</h2>
+                        <p class="text-xl text-porcelain/80 mb-8 max-w-md">Professional facilities upkeep, commercial cleaning, and property support for businesses and operators.</p>
+                        <a href="#commercial" class="inline-flex items-center gap-2 px-8 py-4 bg-porcelain text-forest rounded-full font-medium hover:bg-sage hover:text-white transition-colors shadow-lg">
+                            Explore Commercial Services
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 06: AUTHENTIC GALLERY -->
+            <div class="py-24 px-6 bg-porcelain">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                        <h2 class="font-display text-4xl md:text-5xl font-bold text-forest max-w-lg">Genuine Work.<br>Real Quality.</h2>
+                        <p class="text-forest/70 max-w-md mt-4 md:mt-0 md:text-right">A glimpse into our daily operations, tools, and the dedication we bring to every property.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
+                        <div class="md:col-span-2 md:row-span-2 rounded-3xl overflow-hidden relative group">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/530710034_122103805994965029_1245601474858829304_n.jpg" alt="Saint Marn Quality Check" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="rounded-3xl overflow-hidden relative group">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651126557_122147418422965029_2724797011399052528_n.jpg" alt="Saint Marn Equipment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="rounded-3xl overflow-hidden relative group">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/816164216_122172502586965029_2135872083232821566_n.jpg" alt="Saint Marn Supplies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="md:col-span-2 rounded-3xl overflow-hidden relative group">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/549325518_122116903214965029_9061241628101217632_n.jpg" alt="Saint Marn Workmanship" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 08: PROCESS -->
+            <div class="py-24 bg-eucalyptus/20 border-t border-sand/20">
+                <div class="max-w-7xl mx-auto px-6">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-forest text-center mb-16">How Our Service Works</h2>
+                    
+                    <div class="grid md:grid-cols-4 gap-8 relative">
+                        <!-- Connecting Line (Desktop) -->
+                        <div class="hidden md:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-sage/20 border-t-2 border-dashed border-sage/30"></div>
+                        
+                        <!-- Steps -->
+                        <div class="relative text-center z-10 group">
+                            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-3xl text-sage mb-6 shadow-sm border border-sand/30 group-hover:scale-110 transition-transform">1</div>
+                            <h3 class="font-bold text-xl text-forest mb-2">Get in Touch</h3>
+                            <p class="text-sm text-forest/70">Reach out via phone, email, or our contact form.</p>
+                        </div>
+                        <div class="relative text-center z-10 group">
+                            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-3xl text-sage mb-6 shadow-sm border border-sand/30 group-hover:scale-110 transition-transform">2</div>
+                            <h3 class="font-bold text-xl text-forest mb-2">Discuss Needs</h3>
+                            <p class="text-sm text-forest/70">We evaluate your requirements and property type.</p>
+                        </div>
+                        <div class="relative text-center z-10 group">
+                            <div class="w-24 h-24 mx-auto bg-white rounded-full flex items-center justify-center text-3xl text-sage mb-6 shadow-sm border border-sand/30 group-hover:scale-110 transition-transform">3</div>
+                            <h3 class="font-bold text-xl text-forest mb-2">Arrange Service</h3>
+                            <p class="text-sm text-forest/70">Schedule a time that works best for your property.</p>
+                        </div>
+                        <div class="relative text-center z-10 group">
+                            <div class="w-24 h-24 mx-auto bg-sage text-white rounded-full flex items-center justify-center text-3xl mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                                <i class="ph-fill ph-check-circle"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-forest mb-2">Complete Work</h3>
+                            <p class="text-sm text-forest/70">Professional execution of your requested services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 09: BILINGUAL -->
+            <div class="bg-forest text-porcelain py-16 px-6">
+                <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
+                    <div class="flex-1">
+                        <h2 class="font-display text-4xl font-bold mb-4">Service That Speaks Your Language.</h2>
+                        <p class="text-lg text-porcelain/70">Hablamos Español. We offer full communication in both English and Spanish to ensure clarity and comfort for all our clients.</p>
+                    </div>
+                    <div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center text-4xl shrink-0 mx-auto md:mx-0">
+                        <i class="ph ph-translate text-sand"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 10: ENTERTAINMENT PROMO -->
+            <div class="py-24 bg-sand/20 px-6">
+                <div class="max-w-7xl mx-auto bg-white rounded-5xl p-8 md:p-16 shadow-xl border border-sand/30 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
+                    <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-sage/10 rounded-full blur-3xl"></div>
+                    
+                    <div class="flex-1 z-10 text-center md:text-left">
+                        <span class="inline-block px-4 py-1.5 bg-forest/5 text-forest rounded-full text-sm font-semibold tracking-wide uppercase mb-6">Creative Division</span>
+                        <h2 class="font-display text-4xl font-bold text-forest mb-4">Beyond Property Care</h2>
+                        <p class="text-lg text-forest/70 mb-8">Saint Marn also provides specialized entertainment, music production, event support, and creative marketing services.</p>
+                        <a href="#entertainment" class="inline-flex items-center gap-2 px-6 py-3 bg-forest text-porcelain rounded-full font-medium hover:bg-sage transition-colors">
+                            Explore Creative Services
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="w-full md:w-1/2 h-[300px] rounded-3xl overflow-hidden z-10 relative">
+                        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80" alt="Studio Production" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 11: FAQ -->
+            <div class="py-24 px-6 max-w-3xl mx-auto">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-forest text-center mb-12">Frequently Asked Questions</h2>
+                <div class="space-y-4 font-sans">
+                    <div class="border border-sand/40 rounded-2xl bg-white overflow-hidden">
+                        <button class="w-full px-6 py-5 text-left font-bold text-lg text-forest flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                            What services does Saint Marn provide?
+                            <i class="ph ph-caret-down transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 py-0 max-h-0 overflow-hidden transition-all duration-300 opacity-0 faq-content bg-porcelain/30">
+                            <p class="py-4 text-forest/70">We provide residential and commercial cleaning, property maintenance (including gutter cleaning, pressure washing, painting, and landscaping), property cleanouts, moving, hauling, and junk removal.</p>
+                        </div>
+                    </div>
+                    <div class="border border-sand/40 rounded-2xl bg-white overflow-hidden">
+                        <button class="w-full px-6 py-5 text-left font-bold text-lg text-forest flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                            Do you serve residential and commercial customers?
+                            <i class="ph ph-caret-down transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 py-0 max-h-0 overflow-hidden transition-all duration-300 opacity-0 faq-content bg-porcelain/30">
+                            <p class="py-4 text-forest/70">Yes, we serve both homeowners and businesses. Our services are adaptable to homes, apartments, offices, storefronts, and commercial facilities.</p>
+                        </div>
+                    </div>
+                    <div class="border border-sand/40 rounded-2xl bg-white overflow-hidden">
+                        <button class="w-full px-6 py-5 text-left font-bold text-lg text-forest flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                            Is communication available in Spanish?
+                            <i class="ph ph-caret-down transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 py-0 max-h-0 overflow-hidden transition-all duration-300 opacity-0 faq-content bg-porcelain/30">
+                            <p class="py-4 text-forest/70">Yes, we are fully bilingual and offer communication in both English and Spanish for all our services.</p>
+                        </div>
+                    </div>
+                    <div class="border border-sand/40 rounded-2xl bg-white overflow-hidden">
+                        <button class="w-full px-6 py-5 text-left font-bold text-lg text-forest flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                            How do I arrange a consultation?
+                            <i class="ph ph-caret-down transition-transform duration-300"></i>
+                        </button>
+                        <div class="px-6 py-0 max-h-0 overflow-hidden transition-all duration-300 opacity-0 faq-content bg-porcelain/30">
+                            <p class="py-4 text-forest/70">You can reach out via our contact form, email us at saintmarnenterprises@gmail.com, or call us directly to discuss your needs and arrange a service.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 12: FINAL CTA -->
+            <div class="px-4 md:px-8 pb-12">
+                <div class="w-full max-w-[1400px] mx-auto bg-forest rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=1200&q=80" alt="Beautiful Property" class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-screen">
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <h2 class="font-display text-5xl md:text-6xl font-bold text-porcelain mb-6">Your Property Deserves Thoughtful Care.</h2>
+                        <p class="text-xl text-porcelain/70 mb-10">Whether you need help with cleaning, maintenance, property upkeep or hauling, connect with Saint Marn to discuss your needs.</p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <a href="#contact" class="px-8 py-4 bg-porcelain text-forest rounded-full font-bold hover:bg-sage hover:text-white transition-colors text-lg">Contact Saint Marn</a>
+                            <a href="tel:+18602727918" class="px-8 py-4 bg-transparent text-porcelain border border-porcelain/30 rounded-full font-bold hover:bg-white/10 transition-colors text-lg flex items-center justify-center gap-2">
+                                <i class="ph-fill ph-phone text-xl"></i>
+                                Call Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ABOUT PAGE ==================== -->
+        <section id="page-about" class="page-view">
+            <div class="pt-12 pb-24 px-6 max-w-5xl mx-auto">
+                <h1 class="font-display text-5xl md:text-6xl font-bold text-forest text-center mb-8">About Saint Marn</h1>
+                <p class="text-xl text-forest/70 text-center max-w-2xl mx-auto mb-16">Where professionalism meets creativity. We are your dedicated partners in residential and commercial property care.</p>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-24">
+                    <div class="rounded-4xl overflow-hidden shadow-2xl relative">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/557974456_122120706134965029_2158132408989259323_n.jpg" alt="Saint Marn Branding" class="w-full h-auto object-cover">
+                    </div>
+                    <div>
+                        <h2 class="font-display text-3xl font-bold mb-4">Our Philosophy</h2>
+                        <p class="text-forest/70 text-lg mb-6">We believe that a well-maintained property enhances the quality of life and business operations. Our approach is grounded in reliability, meticulous attention to detail, and a genuine desire to provide solutions tailored to each client's unique requirements.</p>
+                        <p class="text-forest/70 text-lg">Based in Connecticut, we bring a personal touch to professional service, ensuring transparent communication in both English and Spanish.</p>
+                    </div>
+                </div>
+                
+                <!-- Business Identity / Card -->
+                <div class="bg-sand/30 rounded-5xl p-12 text-center border border-sand/50">
+                    <h3 class="font-display text-2xl font-bold mb-8">Official Business Identity</h3>
+                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651173435_122147417762965029_3232453120105519688_n.jpg" alt="Saint Marn Business Identity" class="max-w-md w-full h-auto mx-auto rounded-xl shadow-lg rotate-1 hover:rotate-0 transition-transform">
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PROJECTS & GALLERY PAGE ==================== -->
+        <section id="page-projects" class="page-view">
+            <div class="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="inline-block px-4 py-1.5 bg-sage/10 text-sage rounded-full text-sm font-semibold tracking-wide uppercase mb-6">Visual Proof</span>
+                    <h1 class="font-display text-5xl md:text-6xl font-bold text-forest mb-6">Our Work in Action</h1>
+                    <p class="text-xl text-forest/70 max-w-2xl mx-auto">Genuine imagery of our team, equipment, and meticulous attention to detail on site.</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mb-12">
+                    <button onclick="filterGallery('all', this)" class="filter-btn active px-6 py-2 rounded-full border border-sand/50 text-forest font-medium hover:bg-sage hover:text-white hover:border-sage transition-all">All Projects</button>
+                    <button onclick="filterGallery('cleaning', this)" class="filter-btn px-6 py-2 rounded-full border border-sand/50 text-forest font-medium hover:bg-sage hover:text-white hover:border-sage transition-all">Cleaning</button>
+                    <button onclick="filterGallery('maintenance', this)" class="filter-btn px-6 py-2 rounded-full border border-sand/50 text-forest font-medium hover:bg-sage hover:text-white hover:border-sage transition-all">Maintenance</button>
+                    <button onclick="filterGallery('hauling', this)" class="filter-btn px-6 py-2 rounded-full border border-sand/50 text-forest font-medium hover:bg-sage hover:text-white hover:border-sage transition-all">Hauling & Cleanouts</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]" id="projects-gallery">
+                    <!-- Item 1 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl md:col-span-2" data-category="cleaning">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/546616852_122116061084965029_5458448276191250623_n.jpg" alt="Residential Cleaning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Residential Cleaning</h3>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl" data-category="maintenance">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/545393357_122114908778965029_8631278100854390418_n.jpg" alt="Exterior Maintenance" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Exterior Maintenance</h3>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl lg:row-span-2" data-category="cleaning">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/546626978_122116061036965029_8363836141599580807_n.jpg" alt="Deep Cleaning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Deep Cleaning Services</h3>
+                        </div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl" data-category="maintenance">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/546848903_122116061042965029_5486595934587175762_n.jpg" alt="Property Upkeep" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Property Upkeep</h3>
+                        </div>
+                    </div>
+                    <!-- Item 5 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl md:col-span-2" data-category="cleaning">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/549325518_122116903214965029_9061241628101217632_n.jpg" alt="Detailed Interior Cleaning" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Detailed Interior Cleaning</h3>
+                        </div>
+                    </div>
+                    <!-- Item 6 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl" data-category="cleaning">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/557846789_122120706044965029_6983369234829974480_n.jpg" alt="Premium Products" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Premium Cleaning Products</h3>
+                        </div>
+                    </div>
+                    <!-- Item 7 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl" data-category="hauling">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/558014098_122120706146965029_3076801194296920327_n.jpg" alt="Fleet Readiness" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Fleet & Hauling Readiness</h3>
+                        </div>
+                    </div>
+                    <!-- Item 8 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl" data-category="maintenance">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651126557_122147418422965029_2724797011399052528_n.jpg" alt="Professional Equipment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Professional Grade Equipment</h3>
+                        </div>
+                    </div>
+                    <!-- Item 9 -->
+                    <div class="gallery-item rounded-3xl overflow-hidden relative group shadow-sm hover:shadow-xl md:col-span-2" data-category="hauling">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/651173435_122147417762965029_3232453120105519688_n.jpg" alt="Business Identity" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-forest/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                            <h3 class="text-white font-bold text-lg">Official Business Identity</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SERVICES PAGE (Overview) ==================== -->
+        <section id="page-services" class="page-view">
+             <div class="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h1 class="font-display text-5xl md:text-7xl font-bold text-forest mb-6">Complete Services Directory</h1>
+                    <p class="text-xl text-forest/70 max-w-2xl mx-auto">Discover our four primary divisions of property care, engineered for both homes and businesses.</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    
+                    <!-- A. Cleaning Services -->
+                    <div class="bg-white rounded-5xl p-10 md:p-14 shadow-lg border border-sand/20 relative overflow-hidden group">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/546616852_122116061084965029_5458448276191250623_n.jpg" alt="Cleaning" class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-multiply group-hover:scale-105 transition-transform duration-1000">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-eucalyptus/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                        <div class="relative z-10">
+                            <span class="text-sage font-bold tracking-widest uppercase mb-4 text-sm block">Category A</span>
+                            <h3 class="font-display text-4xl font-bold text-forest mb-6">Cleaning Services</h3>
+                            <ul class="space-y-6 text-forest/80 mb-10">
+                                <li class="flex items-start gap-4">
+                                    <i class="ph-fill ph-house text-2xl text-sage shrink-0 mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-forest">Residential Cleaning</h4>
+                                        <p class="text-sm">Deep, routine, and move-in/out cleaning for homes.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <i class="ph-fill ph-buildings text-2xl text-sage shrink-0 mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-forest">Commercial Cleaning</h4>
+                                        <p class="text-sm">Offices, facilities, and post-construction detailing.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 bg-forest text-porcelain rounded-full font-medium hover:bg-sage transition-colors shadow-md">Request Cleaning <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- B. Property Maintenance -->
+                    <div class="bg-forest rounded-5xl p-10 md:p-14 shadow-lg border border-forest relative overflow-hidden group">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/545393357_122114908778965029_8631278100854390418_n.jpg" alt="Maintenance" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-screen group-hover:scale-105 transition-transform duration-1000">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-sage/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                        <div class="relative z-10">
+                            <span class="text-sand font-bold tracking-widest uppercase mb-4 text-sm block">Category B</span>
+                            <h3 class="font-display text-4xl font-bold text-porcelain mb-6">Property Maintenance</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-porcelain/80 mb-10">
+                                <div>
+                                    <h4 class="font-bold text-lg text-sand mb-1">Gutter Cleaning</h4>
+                                    <p class="text-sm">Downspouts & leaf removal.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-sand mb-1">Pressure Washing</h4>
+                                    <p class="text-sm">Siding, patios, & walkways.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-sand mb-1">Painting</h4>
+                                    <p class="text-sm">Interior patching & finishes.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg text-sand mb-1">Landscaping</h4>
+                                    <p class="text-sm">Lawn care & seasonal cleanups.</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <h4 class="font-bold text-lg text-sand mb-1">Handyman Services</h4>
+                                    <p class="text-sm">General repairs and property improvements.</p>
+                                </div>
+                            </div>
+                            <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 bg-porcelain text-forest rounded-full font-medium hover:bg-sand transition-colors shadow-md">Request Maintenance <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- C. Cleanouts and Hauling -->
+                    <div class="bg-sand/30 rounded-5xl p-10 md:p-14 shadow-lg border border-sand/40 relative overflow-hidden group">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/816164216_122172502586965029_2135872083232821566_n.jpg" alt="Hauling" class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-multiply group-hover:scale-105 transition-transform duration-1000">
+                        <div class="relative z-10">
+                            <span class="text-brass font-bold tracking-widest uppercase mb-4 text-sm block">Category C</span>
+                            <h3 class="font-display text-4xl font-bold text-forest mb-6">Cleanouts & Hauling</h3>
+                            <ul class="space-y-6 text-forest/80 mb-10">
+                                <li class="flex items-start gap-4">
+                                    <i class="ph-fill ph-truck text-2xl text-brass shrink-0 mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-forest">Property Cleanouts</h4>
+                                        <p class="text-sm">Estate, apartment, basement, and garage cleanouts.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <i class="ph-fill ph-package text-2xl text-brass shrink-0 mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-forest">Moving & Hauling</h4>
+                                        <p class="text-sm">Local moving, loading, and furniture delivery.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <i class="ph-fill ph-trash text-2xl text-brass shrink-0 mt-1"></i>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-forest">Junk Removal</h4>
+                                        <p class="text-sm">Responsible disposal of appliances and yard debris.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-forest rounded-full font-medium hover:bg-forest hover:text-white transition-colors shadow-md">Request Hauling <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- D. Commercial Property Care -->
+                    <div class="bg-eucalyptus rounded-5xl p-10 md:p-14 shadow-lg border border-sage/20 relative overflow-hidden group">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/707329261_122156949056965029_4732790494354928602_n.jpg" alt="Commercial space" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-multiply group-hover:scale-105 transition-transform duration-1000">
+                        <div class="relative z-10">
+                            <span class="text-forest font-bold tracking-widest uppercase mb-4 text-sm block">Category D</span>
+                            <h3 class="font-display text-4xl font-bold text-forest mb-6">Commercial Care</h3>
+                            <p class="text-forest/80 text-lg mb-8 leading-relaxed">
+                                Tailored property solutions strictly for business owners, office managers, and commercial property operators. We handle everything from storefront pressure washing to post-construction cleanup and daily facility maintenance.
+                            </p>
+                            <a href="#commercial" class="inline-flex items-center gap-2 px-6 py-3 bg-forest text-porcelain rounded-full font-medium hover:bg-sage transition-colors shadow-md">View Commercial Details <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== RESIDENTIAL PAGE ==================== -->
+        <section id="page-residential" class="page-view">
+            <div class="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+                <div class="bg-sand rounded-[3rem] md:rounded-[4rem] p-12 md:p-20 mb-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 shadow-xl">
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="inline-block px-4 py-1.5 bg-white/40 text-forest rounded-full text-sm font-semibold tracking-wide uppercase mb-6 backdrop-blur-md">For Homeowners & Tenants</span>
+                        <h1 class="font-display text-5xl md:text-7xl font-bold text-forest mb-6">Residential Services</h1>
+                        <p class="text-xl text-forest/80">Meticulous care for your home environment. From deep cleaning to whole-home maintenance and heavy hauling.</p>
+                    </div>
+                    <div class="w-full md:w-1/3 aspect-square rounded-full overflow-hidden shadow-2xl relative z-10 border-8 border-white/40">
+                        <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/707329261_122156949056965029_4732790494354928602_n.jpg" alt="Beautiful Residential Interior" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-white/30 rounded-full blur-3xl"></div>
+                </div>
+
+                <div class="space-y-24">
+                    <!-- Res Cleaning -->
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="rounded-[3rem] overflow-hidden shadow-2xl h-[500px] relative">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/546616852_122116061084965029_5458448276191250623_n.jpg" alt="Home Cleaning" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-forest/80 to-transparent flex items-end p-10">
+                                <h2 class="font-display text-4xl font-bold text-white">Residential Cleaning</h2>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xl text-forest/80 mb-8 leading-relaxed">Whether it's a routine refresh or a meticulous move-in preparation, our residential cleaning services ensure your living spaces are pristine, hygienic, and welcoming.</p>
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-sand/30">
+                                    <h4 class="font-bold text-lg text-forest mb-2">Deep Cleaning</h4>
+                                    <p class="text-sm text-forest/70">Comprehensive top-to-bottom scrub for neglected spaces.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-sand/30">
+                                    <h4 class="font-bold text-lg text-forest mb-2">Routine Housekeeping</h4>
+                                    <p class="text-sm text-forest/70">Scheduled upkeep to maintain a perfect home environment.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-sand/30 md:col-span-2">
+                                    <h4 class="font-bold text-lg text-forest mb-2">Move-in / Move-out</h4>
+                                    <p class="text-sm text-forest/70">Ensure property readiness for new tenants or homeowners with intensive detailing.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Res Maintenance -->
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="order-2 lg:order-1">
+                            <h2 class="font-display text-4xl font-bold text-forest mb-6">Home Maintenance</h2>
+                            <p class="text-xl text-forest/80 mb-8 leading-relaxed">Protect your investment with professional exterior and interior upkeep, handled securely by the Saint Marn team.</p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-4 p-4 bg-eucalyptus/20 rounded-2xl">
+                                    <i class="ph-fill ph-drop text-2xl text-sage"></i>
+                                    <div>
+                                        <h4 class="font-bold text-forest">Gutter Cleaning & Pressure Washing</h4>
+                                        <p class="text-sm text-forest/70">Protect your roof and siding while restoring patios and walkways.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4 p-4 bg-eucalyptus/20 rounded-2xl">
+                                    <i class="ph-fill ph-paint-brush text-2xl text-sage"></i>
+                                    <div>
+                                        <h4 class="font-bold text-forest">Interior Painting & Handyman</h4>
+                                        <p class="text-sm text-forest/70">Expert plastering, painting, and general household repairs.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4 p-4 bg-eucalyptus/20 rounded-2xl">
+                                    <i class="ph-fill ph-plant text-2xl text-sage"></i>
+                                    <div>
+                                        <h4 class="font-bold text-forest">Landscaping</h4>
+                                        <p class="text-sm text-forest/70">Lawn care and seasonal yard cleanups.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="order-1 lg:order-2 rounded-[3rem] overflow-hidden shadow-2xl h-[500px] relative">
+                            <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/545393357_122114908778965029_8631278100854390418_n.jpg" alt="Home Maintenance" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Res Hauling -->
+                    <div class="bg-forest rounded-[3rem] md:rounded-[4rem] p-12 md:p-20 text-porcelain relative overflow-hidden shadow-2xl text-center">
+                        <div class="absolute inset-0 opacity-20">
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80" alt="Hauling Stock Image" class="w-full h-full object-cover">
+                        </div>
+                        <div class="relative z-10 max-w-3xl mx-auto">
+                            <i class="ph-fill ph-truck text-5xl text-sand mb-6"></i>
+                            <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Cleanouts, Junk Removal & Moving</h2>
+                            <p class="text-xl text-porcelain/80 mb-10 leading-relaxed">Whether you are clearing an estate, emptying a basement, or moving locally, our hauling team provides the heavy lifting and responsible disposal required.</p>
+                            <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 bg-sand text-forest rounded-full font-bold hover:bg-white transition-colors">Schedule a Pickup <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== COMMERCIAL PAGE ==================== -->
+        <section id="page-commercial" class="page-view">
+            <div class="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+                <div class="bg-forest text-porcelain rounded-[3rem] md:rounded-[4rem] p-12 md:p-20 mb-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 shadow-2xl">
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="inline-block px-4 py-1.5 bg-white/10 text-sand rounded-full text-sm font-semibold tracking-wide uppercase mb-6 backdrop-blur-md">Business Solutions</span>
+                        <h1 class="font-display text-5xl md:text-7xl font-bold mb-6">Commercial Services</h1>
+                        <p class="text-xl text-porcelain/80">Professional facilities upkeep, structural maintenance, and operational support designed strictly for business properties.</p>
+                    </div>
+                    <div class="w-full md:w-1/3 aspect-square rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border border-white/20">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Commercial Space" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-sage/20 rounded-full blur-3xl"></div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 mb-12">
+                    <!-- Office Cleaning -->
+                    <div class="bg-white p-10 rounded-4xl shadow-sm border border-sand/20 hover:shadow-xl transition-all group">
+                        <div class="w-16 h-16 bg-sage/10 text-sage rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-buildings text-3xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-forest mb-4">Office & Facility Cleaning</h3>
+                        <p class="text-forest/70 mb-6">Routine and deep cleaning for office spaces, retail storefronts, and commercial facilities. We maintain a hygienic, professional environment for your staff and clients.</p>
+                        <ul class="text-sm text-forest/70 space-y-2">
+                            <li>• Daily/Weekly scheduled cleaning</li>
+                            <li>• Restroom sanitation</li>
+                            <li>• Floor and carpet care</li>
+                        </ul>
+                    </div>
+
+                    <!-- Post Construction -->
+                    <div class="bg-white p-10 rounded-4xl shadow-sm border border-sand/20 hover:shadow-xl transition-all group">
+                        <div class="w-16 h-16 bg-sage/10 text-sage rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-broom text-3xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-forest mb-4">Post-Construction Detail</h3>
+                        <p class="text-forest/70 mb-6">Transform a construction site into a move-in ready business space. We handle the intense dust removal and final surface polishing after commercial renovations.</p>
+                        <ul class="text-sm text-forest/70 space-y-2">
+                            <li>• Fine dust extraction</li>
+                            <li>• Debris clearing</li>
+                            <li>• Final surface polishing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Exterior Washing -->
+                    <div class="bg-sand/30 p-8 rounded-4xl shadow-sm border border-sand/50">
+                        <h3 class="font-bold text-xl text-forest mb-3">Commercial Pressure Washing</h3>
+                        <p class="text-forest/70 text-sm">Maintain excellent curb appeal with high-grade exterior washing for storefronts, building facades, and concrete walkways.</p>
+                    </div>
+                    <!-- Painting & Maintenance -->
+                    <div class="bg-sand/30 p-8 rounded-4xl shadow-sm border border-sand/50">
+                        <h3 class="font-bold text-xl text-forest mb-3">Painting & Property Maintenance</h3>
+                        <p class="text-forest/70 text-sm">Keep rental properties and business facilities flawless with our commercial interior painting and general maintenance services.</p>
+                    </div>
+                    <!-- Commercial Hauling -->
+                    <div class="bg-sand/30 p-8 rounded-4xl shadow-sm border border-sand/50">
+                        <h3 class="font-bold text-xl text-forest mb-3">Commercial Cleanouts & Moving</h3>
+                        <p class="text-forest/70 text-sm">Efficient office cleanouts, heavy equipment hauling, and local logistics for business relocation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ENTERTAINMENT PAGE ==================== -->
+        <section id="page-entertainment" class="page-view">
+            <div class="bg-forest text-porcelain min-h-[80vh] flex flex-col pt-24 pb-24 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-full h-full opacity-10">
+                    <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1600&q=80" alt="Music Studio" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="max-w-5xl mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center">
+                    <span class="text-sage font-bold tracking-widest uppercase mb-4 text-sm">Saint Marn Creative Division</span>
+                    <h1 class="font-display text-5xl md:text-7xl font-bold mb-8">Where Professionalism Meets Creativity.</h1>
+                    <p class="text-xl text-porcelain/70 max-w-2xl mb-12">Beyond property services, Saint Marn operates a dedicated entertainment division supporting artists, businesses, and event organizers.</p>
+                    
+                    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16">
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-sm">
+                            <h3 class="font-bold text-lg mb-2">Music & Audio</h3>
+                            <p class="text-sm text-porcelain/60">Music recording, production, and professional voice-overs.</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-sm">
+                            <h3 class="font-bold text-lg mb-2">Visual Production</h3>
+                            <p class="text-sm text-porcelain/60">Music video production, commercial photoshoots, and TV ads.</p>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-sm">
+                            <h3 class="font-bold text-lg mb-2">Events & Marketing</h3>
+                            <p class="text-sm text-porcelain/60">Concerts, live event support, social media marketing, and custom merch.</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 bg-sage text-white rounded-full font-bold hover:bg-white hover:text-forest transition-colors shadow-lg">
+                            Inquire About Creative Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== CONTACT PAGE ==================== -->
+        <section id="page-contact" class="page-view">
+            <div class="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16">
+                    <div>
+                        <h1 class="font-display text-5xl md:text-6xl font-bold text-forest mb-6">Let's Work Together.</h1>
+                        <p class="text-xl text-forest/70 mb-12">Reach out to discuss your property needs. We provide custom solutions and flexible scheduling.</p>
+                        
+                        <div class="space-y-8 mb-12">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-sage shadow-sm border border-sand/30">
+                                    <i class="ph-fill ph-phone-call text-2xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-forest/50 uppercase tracking-wide">Phone</p>
+                                    <a href="tel:+18602727918" class="text-xl font-medium text-forest hover:text-sage transition-colors">+1 860-272-7918</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-sage shadow-sm border border-sand/30">
+                                    <i class="ph-fill ph-envelope-simple text-2xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-forest/50 uppercase tracking-wide">Email</p>
+                                    <a href="mailto:saintmarnenterprises@gmail.com" class="text-xl font-medium text-forest hover:text-sage transition-colors">saintmarnenterprises@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-sage shadow-sm border border-sand/30">
+                                    <i class="ph-fill ph-map-pin text-2xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-forest/50 uppercase tracking-wide">Location</p>
+                                    <p class="text-xl font-medium text-forest">145 New London Turnpike,<br>Glastonbury, CT 06033</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <div class="bg-white p-8 md:p-10 rounded-[3rem] shadow-xl border border-sand/30 relative">
+                        <h3 class="font-display text-3xl font-bold text-forest mb-6">Service Inquiry</h3>
+                        <form id="contact-form" class="space-y-5" onsubmit="handleFormSubmit(event)">
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="form-name" class="block text-sm font-bold text-forest/70 mb-2">Full Name *</label>
+                                    <input id="form-name" type="text" required class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors">
+                                </div>
+                                <div>
+                                    <label for="form-phone" class="block text-sm font-bold text-forest/70 mb-2">Phone Number *</label>
+                                    <input id="form-phone" type="tel" required class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="form-email" class="block text-sm font-bold text-forest/70 mb-2">Email Address *</label>
+                                <input id="form-email" type="email" required class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors">
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="form-property" class="block text-sm font-bold text-forest/70 mb-2">Property Type</label>
+                                    <select id="form-property" class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors appearance-none">
+                                        <option>Residential</option>
+                                        <option>Commercial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="form-service" class="block text-sm font-bold text-forest/70 mb-2">Service Category</label>
+                                    <select id="form-service" class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors appearance-none">
+                                        <option>Cleaning</option>
+                                        <option>Maintenance & Handyman</option>
+                                        <option>Hauling & Cleanouts</option>
+                                        <option>Entertainment / Creative</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="form-location" class="block text-sm font-bold text-forest/70 mb-2">Project Location (City, Zip) *</label>
+                                <input id="form-location" type="text" required class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors">
+                            </div>
+                            <div>
+                                <label for="form-details" class="block text-sm font-bold text-forest/70 mb-2">Description of Requirements</label>
+                                <textarea id="form-details" rows="4" required class="w-full bg-porcelain border border-sand/50 rounded-xl px-4 py-3 focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors resize-none"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full py-4 bg-forest text-porcelain rounded-xl font-bold hover:bg-sage transition-colors shadow-md text-lg mt-4">Draft Email Inquiry</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-forest text-porcelain pt-20 pb-10 border-t border-white/10 mt-auto rounded-t-[3rem] md:rounded-t-[4rem]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <!-- Corrected Dark Footer Logo Treatment -->
+                    <img src="https://raw.githubusercontent.com/CreativeTugsDotCom/RDS/refs/heads/main/548304449_122117237096965029_2833527915417557357_n.jpg" alt="Saint Marn Logo" class="h-14 mb-6 object-contain footer-logo block">
+                    <p class="text-porcelain/70 text-sm mb-4 leading-relaxed">Where professionalism meets creativity. Providing trusted residential and commercial property services across Connecticut.</p>
+                    <div class="flex gap-4">
+                        <a href="https://www.facebook.com/SaintMarnEnterprisesLlc" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1877F2] transition-colors group" aria-label="Facebook"><i class="ph-fill ph-facebook-logo text-xl group-hover:text-white"></i></a>
+                        <a href="https://www.tiktok.com/@saintmarnenterprisesllc" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-black transition-colors group" aria-label="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4">
+                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#25F4EE" transform="translate(-4, -4)"/>
+                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="#FE2C55" transform="translate(4, 4)"/>
+                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-sand">Navigation</h4>
+                    <ul class="space-y-3 text-porcelain/70 text-sm">
+                        <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">All Services</a></li>
+                        <li><a href="#projects" class="hover:text-white transition-colors">Projects & Gallery</a></li>
+                        <li><a href="#entertainment" class="hover:text-white transition-colors">Entertainment</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-sand">Services</h4>
+                    <ul class="space-y-3 text-porcelain/70 text-sm">
+                        <li><a href="#residential" class="hover:text-white transition-colors">Residential Cleaning</a></li>
+                        <li><a href="#commercial" class="hover:text-white transition-colors">Commercial Cleaning</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Property Maintenance</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Cleanouts & Hauling</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6 text-sand">Contact</h4>
+                    <ul class="space-y-3 text-porcelain/70 text-sm">
+                        <li><a href="tel:+18602727918" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-fill ph-phone"></i> +1 860-272-7918</a></li>
+                        <li><a href="mailto:saintmarnenterprises@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="ph-fill ph-envelope"></i> Email Us</a></li>
+                        <li class="flex items-start gap-2 mt-4 text-porcelain/50">
+                            <i class="ph-fill ph-map-pin mt-1"></i>
+                            145 New London Turnpike,<br>Glastonbury, CT 06033
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-porcelain/50">
+                <p>&copy; 2026 Saint Marn Enterprises LLC. All rights reserved.</p>
+                <p>Hablamos Español.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Form Success / Instruction Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center bg-forest/80 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-porcelain rounded-3xl max-w-md w-full p-8 text-center shadow-2xl transform scale-95 transition-transform duration-300 success-content">
+            <div class="w-20 h-20 bg-sage text-white rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-lg">
+                <i class="ph-fill ph-paper-plane-right"></i>
+            </div>
+            <h3 class="font-display text-3xl font-bold text-forest mb-4">Draft Generated</h3>
+            <p class="text-forest/70 mb-8">Your default email client has been opened with your inquiry details formatted. <strong class="text-forest">Please review and send the email</strong> to complete your request.</p>
+            <button onclick="closeSuccessModal()" class="px-8 py-3 bg-forest text-porcelain rounded-full font-bold hover:bg-sage transition-colors w-full">Understood</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. SPA Routing Logic ---
+        function navigateTo(pageId) {
+            const allPages = document.querySelectorAll('.page-view');
+            const targetPage = document.getElementById(`page-${pageId}`);
+            
+            if (targetPage) {
+                allPages.forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                });
+                
+                targetPage.style.display = 'block';
+                void targetPage.offsetWidth; // Trigger reflow for CSS animation
+                targetPage.classList.add('active');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                closeMobileMenu();
+                
+                // Update URL quietly without jumping
+                if (window.location.hash !== `#${pageId}`) {
+                    history.pushState(null, null, `#${pageId}`);
+                }
+            }
+        }
+
+        // Intercept all clicks on standard anchors to prevent hash jumping bugs
+        document.addEventListener('click', (e) => {
+            const anchor = e.target.closest('a');
+            if (anchor && anchor.getAttribute('href') && anchor.getAttribute('href').startsWith('#')) {
+                const pageId = anchor.getAttribute('href').substring(1);
+                if (pageId && document.getElementById(`page-${pageId}`)) {
+                    e.preventDefault();
+                    navigateTo(pageId);
+                }
+            }
+        });
+
+        // Browser Back/Forward navigation
+        window.addEventListener('popstate', () => {
+            let hash = window.location.hash.substring(1);
+            navigateTo(hash || 'home');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let hash = window.location.hash.substring(1);
+            navigateTo(hash || 'home');
+        });
+
+        // --- 2. Glassmorphic Header Scroll Effect (Refined) ---
+        const header = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+                header.classList.remove('top-6');
+                header.classList.add('top-4'); // Keep it floating securely
+            } else {
+                header.classList.remove('scrolled', 'top-4');
+                header.classList.add('top-6');
+            }
+        });
+
+        // --- 3. Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+        });
+
+        function closeMobileMenu() {
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            }
+        }
+
+        // --- 4. Automated Popup (18s Delay) ---
+        const popup = document.getElementById('consultation-popup');
+        const closePopupBtn = document.getElementById('close-popup');
+        const popupExploreBtn = document.getElementById('popup-explore');
+        let popupShown = sessionStorage.getItem('saintMarnPopupShown');
+
+        if (!popupShown) {
+            setTimeout(() => {
+                popup.classList.remove('hidden');
+                void popup.offsetWidth;
+                popup.classList.remove('opacity-0');
+                popup.classList.add('opacity-100');
+                popup.querySelector('.popup-content').classList.remove('translate-y-8');
+                popup.querySelector('.popup-content').classList.add('translate-y-0');
+                sessionStorage.setItem('saintMarnPopupShown', 'true');
+            }, 18000);
+        }
+
+        function closePopup() {
+            popup.classList.remove('opacity-100');
+            popup.classList.add('opacity-0');
+            popup.querySelector('.popup-content').classList.remove('translate-y-0');
+            popup.querySelector('.popup-content').classList.add('translate-y-8');
+            setTimeout(() => {
+                popup.classList.add('hidden');
+            }, 500);
+        }
+
+        closePopupBtn.addEventListener('click', closePopup);
+        popupExploreBtn.addEventListener('click', closePopup);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
+                closePopup();
+            }
+        });
+
+        // --- 5. FAQ Accordion ---
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove('opacity-100');
+                content.classList.add('opacity-0');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.remove('opacity-0');
+                content.classList.add('opacity-100');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // --- 6. Form Handling (Mailto Fallback Generation) ---
+        const successModal = document.getElementById('success-modal');
+        
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Extract Form Data
+            const name = document.getElementById('form-name').value;
+            const phone = document.getElementById('form-phone').value;
+            const email = document.getElementById('form-email').value;
+            const propType = document.getElementById('form-property').value;
+            const service = document.getElementById('form-service').value;
+            const location = document.getElementById('form-location').value;
+            const details = document.getElementById('form-details').value;
+
+            // Generate mailto link
+            const subject = encodeURIComponent(`Service Inquiry: ${service} - ${name}`);
+            const body = encodeURIComponent(`New Service Inquiry via Website:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nProperty Type: ${propType}\nService Category: ${service}\nLocation: ${location}\n\nProject Details:\n${details}`);
+            
+            // Trigger email client
+            window.location.href = `mailto:saintmarnenterprises@gmail.com?subject=${subject}&body=${body}`;
+
+            // Show instructional modal
+            successModal.classList.remove('hidden');
+            void successModal.offsetWidth; 
+            successModal.classList.remove('opacity-0');
+            successModal.classList.add('opacity-100');
+            successModal.querySelector('.success-content').classList.remove('scale-95');
+            successModal.querySelector('.success-content').classList.add('scale-100');
+            
+            document.getElementById('contact-form').reset();
+        }
+
+        function closeSuccessModal() {
+            successModal.classList.remove('opacity-100');
+            successModal.classList.add('opacity-0');
+            successModal.querySelector('.success-content').classList.remove('scale-100');
+            successModal.querySelector('.success-content').classList.add('scale-95');
+            setTimeout(() => {
+                successModal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- 7. Gallery Filtering ---
+        function filterGallery(category, btn) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-sage', 'text-white'));
+            btn.classList.add('active');
+            
+            // Update items
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                    setTimeout(() => item.style.opacity = '1', 50);
+                } else {
+                    item.style.opacity = '0';
+                    setTimeout(() => item.classList.add('hidden'), 300);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
